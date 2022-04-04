@@ -20,6 +20,9 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    from . import database
+    database.init_app(app)
+
     @app.route('/health')
     def health_check():
         return 'Healthy!'
