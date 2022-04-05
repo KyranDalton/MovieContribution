@@ -45,7 +45,7 @@ def register():
             return render_template(REGISTER_TEMPLATE)
         else:
             # Success, go to the login page.
-            flash("Loging successful", "info")
+            flash("Sign up successful, please log in", "info")
             return redirect(url_for("auth.login"))
     
     return render_template(REGISTER_TEMPLATE)
@@ -74,17 +74,16 @@ def login():
         # and go back to the home page
         session.clear()
         session["user_id"] = user["user_id"]
-        # TODO: Enable this when index is defined
-        # return redirect(url_for("index"))
+
+        flash('Login successful', 'info')
+        return redirect(url_for("index"))
 
     return render_template(LOGIN_TEMPLATE)
 
 @bp.route("/logout")
 def logout():
     session.clear()
-    # TODO: Enable this when index is defined
-    # return redirect(url_for("index"))
-    return redirect(url_for("auth.login"))
+    return redirect(url_for("index"))
 
 @bp.before_app_request
 def load_logged_in_user():
