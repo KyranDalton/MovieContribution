@@ -28,7 +28,7 @@ def register():
         password = request.form["password"]
 
         db = get_db()
-        
+
         validation_error = _validate_registration(username, email, password)
         if validation_error is not None:
             flash(validation_error, "error")
@@ -40,14 +40,14 @@ def register():
                 (username, email, generate_password_hash(password)),
             )
             db.commit()
-        except db.IntegrityError as er:
+        except db.IntegrityError:
             flash(f"User {username} is already registered.", "error")
             return render_template(REGISTER_TEMPLATE)
         else:
             # Success, go to the login page.
             flash("Sign up successful, please log in", "info")
             return redirect(url_for("auth.login"))
-    
+
     return render_template(REGISTER_TEMPLATE)
 
 @bp.route("/login", methods=("GET", "POST"))
@@ -121,8 +121,8 @@ def _validate_email(email):
     if email is None:
         return "Email is required"
 
-    emailMatch = re.fullmatch(r"[^@]+@[^@]+\.[^@]+", email)
-    if emailMatch is None:
+    email_match = re.fullmatch(r"[^@]+@[^@]+\.[^@]+", email)
+    if email_match is None:
         return "Invalid email"
 
 def _validate_password(password):
