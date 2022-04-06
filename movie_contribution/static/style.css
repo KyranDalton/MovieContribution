@@ -122,6 +122,10 @@ input.danger {
     color: #cc2f2e;
 }
 
+input.danger[disabled] {
+    color: grey;
+}
+
 input[type=submit] {
     min-width: 10em;
 }

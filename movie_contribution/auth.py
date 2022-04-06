@@ -36,8 +36,8 @@ def register():
 
         try:
             db.execute(
-                "INSERT INTO user (username, email, password) VALUES (?, ?, ?)",
-                (username, email, generate_password_hash(password)),
+                "INSERT INTO user (username, email, password, is_admin) VALUES (?, ?, ?, ?)",
+                (username, email, generate_password_hash(password), _is_admin(email)),
             )
             db.commit()
         except db.IntegrityError:
@@ -131,3 +131,7 @@ def _validate_password(password):
 
     if len(password) < 8:
         return "Password must be longer than 8 characters"
+
+def _is_admin(email):
+    # If user is IMDb core staff, make them admin
+    return email.endswith('@imdb.com')

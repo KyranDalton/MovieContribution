@@ -84,7 +84,11 @@ def update(movie_id):
 def delete(movie_id):
     _get_movie(movie_id)
 
-    # TODO: Only allow admin users to delete movies
+    user_is_admin = g.user['is_admin']
+
+    if not user_is_admin:
+        abort(403)
+
     db = get_db()
     db.execute("DELETE FROM movie WHERE movie_id = ?", (movie_id,))
     db.commit()

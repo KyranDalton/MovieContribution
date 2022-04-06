@@ -51,7 +51,7 @@ def test_registration_existing_username(client, app):
             is None
         )
 
-def test_registration_successful(client, app):
+def test_registration_successful_not_admin(client, app):
     response = client.post("/auth/register", data={
         "username": "abc",
         "email": "abc@email.com",
@@ -66,10 +66,28 @@ def test_registration_successful(client, app):
 
     # Make sure we wrote to the DB
     with app.app_context():
-        assert (
-            get_db().execute("SELECT * FROM user WHERE username = 'abc'").fetchone()
-            is not None
-        )
+        user = get_db().execute("SELECT * FROM user WHERE username = 'abc'").fetchone()
+        assert user is not None
+        assert user['is_admin'] == 0
+
+def test_registration_successful_is_admin(client, app):
+    response = client.post("/auth/register", data={
+        "username": "abc",
+        "email": "abc@imdb.com",
+        "password": "abcdefgh"
+    })
+
+    # Make sure we redirect to the login page
+    expected_location = "/auth/login"
+    actual_location = response.headers["Location"]
+
+    assert expected_location == actual_location
+
+    # Make sure we wrote to the DB
+    with app.app_context():
+        user = get_db().execute("SELECT * FROM user WHERE username = 'abc'").fetchone()
+        assert user is not None
+        assert user['is_admin'] == 1
 
 
 def test_login_incorrect_username(client):

@@ -16,6 +16,10 @@
     </form>
     <hr>
     <form action="{{ url_for('movie.delete', movie_id=movie['movie_id']) }}" method="post">
-        <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+        {% if g.user['is_admin'] == 1 %}
+            <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+        {% else %}
+            <input class="danger" type="submit" value="Delete" disabled onclick="return confirm('Are you sure?');">
+        {% endif %}
     </form>
 {% endblock %}

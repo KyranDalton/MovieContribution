@@ -61,8 +61,20 @@ def test_update_succeeds(client, app, auth):
         assert movie["plot"] == "A new plot for A Test Movie" # Does change
 
 
-def test_delete_succeeds(client, auth, app):
+def test_delete_error_not_admin(client, auth, app):
     auth.login()
+
+    response = client.post("/1/delete")
+
+    assert response.status_code == 403
+
+    # Check we didn't delete the data in the DB
+    with app.app_context():
+        count = get_db().execute("SELECT COUNT(*) FROM movie").fetchone()[0]
+        assert count == 1
+
+def test_delete_succeeds(client, auth, app):
+    auth.login('other', 'other')
 
     response = client.post("/1/delete")
 
