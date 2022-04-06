@@ -3,7 +3,7 @@
 {% block header %}
     <h1>{% block title %}Movies{% endblock %}</h1>
     {% if g.user %}
-        <a class="action" href="{{ url_for('movie.add') }}">New Movie</a>
+        <a href="{{ url_for('movie.add') }}">New Movie</a>
     {% endif %}
 {% endblock %}
 

@@ -129,3 +129,7 @@ input.danger[disabled] {
 input[type=submit] {
     min-width: 10em;
 }
+
+.row-spacer {
+    min-width: 7em;
+}

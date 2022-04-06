@@ -5,21 +5,33 @@
 {% endblock %}
 
 {% block content %}
-    <form method="post">
-        <label for="movie_title">Movie Title</label>
-        <input name="movie_title" id="movie_title" value="{{ request.form['movie_title'] or movie['movie_title'] }}" required>
-
-        <label for="plot">Plot</label>
-        <textarea name="plot" id="plot" required>{{ request.form['plot'] or movie['plot'] }}</textarea>
-
-        <input type="submit" value="Save">
-    </form>
-    <hr>
-    <form action="{{ url_for('movie.delete', movie_id=movie['movie_id']) }}" method="post">
-        {% if g.user['is_admin'] == 1 %}
-            <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
-        {% else %}
-            <input class="danger" type="submit" value="Delete" disabled onclick="return confirm('Are you sure?');">
-        {% endif %}
-    </form>
+    <table>
+        <form method="post">
+            <tr>
+                <td><label for="movie_title">Movie Title</label></td>
+                <td><input name="movie_title" id="movie_title" value="{{ request.form['movie_title'] or movie['movie_title'] }}" required></td>
+            </tr>
+            <tr>
+                <td><label for="plot">Plot</label></td>
+                <td><textarea name="plot" id="plot" required>{{ request.form['plot'] or movie['plot'] }}</textarea></td>
+            </tr>
+            <tr>
+                <td class="row-spacer"></td>
+                <td><input type="submit" value="Save"></td>
+            </tr>
+        </form>
+        <form action="{{ url_for('movie.delete', movie_id=movie['movie_id']) }}" method="post">
+            {% if g.user['is_admin'] == 1 %}
+                <tr>
+                    <td class="row-spacer"></td>
+                    <td><input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');"></td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td class="row-spacer"></td>
+                    <td><input class="danger" type="submit" value="Delete" disabled onclick="return confirm('Are you sure?');"></td>
+                </tr>
+            {% endif %}
+        </form>
+    </table>
 {% endblock %}
