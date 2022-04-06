@@ -9,6 +9,8 @@ from movie_contribution.auth import (
     _validate_password
 )
 
+import json
+
 def test_registration_validation_failed(client, app):
     response = client.post("auth/register", data={
         "username": "abc",
@@ -19,17 +21,15 @@ def test_registration_validation_failed(client, app):
     # Make sure we don't redirect
     assert "Location" not in response.headers
 
+    # Check the flashed message
+    assert b"Invalid email" in response.data
+
     # Make sure we didn't write to the DB
     with app.app_context():
         assert (
             get_db().execute("SELECT * FROM user WHERE username = 'abc'").fetchone()
             is None
         )
-
-    # Check the flashed message
-    with client.session_transaction() as client_session:
-        flash_message = dict(client_session["_flashes"]).get("error")
-        assert "Invalid email" == flash_message
 
 def test_registration_existing_username(client, app):
     response = client.post("auth/register", data={
@@ -41,17 +41,15 @@ def test_registration_existing_username(client, app):
     # Make sure we don't redirect
     assert "Location" not in response.headers
 
+    # Check the flashed message
+    assert b"User test is already registered." in response.data
+
     # Make sure we didn't write to the DB
     with app.app_context():
         assert (
             get_db().execute("SELECT * FROM user WHERE username = 'abc'").fetchone()
             is None
         )
-
-    # Check the flashed message
-    with client.session_transaction() as client_session:
-        flash_message = dict(client_session["_flashes"]).get("error")
-        assert "User test is already registered." == flash_message
 
 def test_registration_successful(client, app):
     response = client.post("/auth/register", data={
@@ -80,10 +78,10 @@ def test_login_incorrect_username(client):
         "password": "12345678"
     })
 
+    # Check the flashed message
+    assert b"Invalid username or password." in response.data
+
     with client.session_transaction() as client_session:
-        # Check flashed message
-        flash_message = dict(client_session["_flashes"]).get("error")
-        assert "Invalid username or password." == flash_message
         # Make sure we haven't signed in
         assert "user_id" not in client_session
 
@@ -93,10 +91,10 @@ def test_login_incorrect_password(client):
         "password": "incorrect"
     })
 
+    # Check the flashed message
+    assert b"Invalid username or password." in response.data
+
     with client.session_transaction() as client_session:
-        # Check flashed message
-        flash_message = dict(client_session["_flashes"]).get("error")
-        assert "Invalid username or password." == flash_message
         # Make sure we haven't signed in
         assert "user_id" not in client_session
 
