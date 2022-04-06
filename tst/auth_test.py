@@ -57,12 +57,12 @@ def test_registration_successful(client, app):
         "email": "abc@email.com",
         "password": "abcdefgh"
     })
-    
-    # Make sure we redirect to the login page
-    expectedLocation = "/auth/login"
-    actualLocation = response.headers["Location"]
 
-    assert expectedLocation == actualLocation
+    # Make sure we redirect to the login page
+    expected_location = "/auth/login"
+    actual_location = response.headers["Location"]
+
+    assert expected_location == actual_location
 
     # Make sure we wrote to the DB
     with app.app_context():
@@ -99,7 +99,7 @@ def test_login_incorrect_password(client):
         assert "user_id" not in client_session
 
 def test_login_successful(client):
-    response = client.post("/auth/login", data={
+    client.post("/auth/login", data={
         "username": "test",
         "password": "test"
     })

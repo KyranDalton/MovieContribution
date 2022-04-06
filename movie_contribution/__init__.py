@@ -20,18 +20,17 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    from . import database
+    from movie_contribution import database
     database.init_app(app)
 
-    from . import auth
+    from movie_contribution import auth, movie
     app.register_blueprint(auth.bp)
+    app.register_blueprint(movie.bp)
+
+    app.add_url_rule('/', endpoint='index')
 
     @app.route('/health')
     def health_check():
         return 'Healthy!'
-
-    @app.route('/')
-    def index():
-        return render_template('index.html')
 
     return app

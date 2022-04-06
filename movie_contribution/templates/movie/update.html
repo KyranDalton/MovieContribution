@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Edit "{{ movie['movie_title'] }}"{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <label for="movie_title">Movie Title</label>
+        <input name="movie_title" id="movie_title" value="{{ request.form['movie_title'] or movie['movie_title'] }}" required>
+
+        <label for="plot">Plot</label>
+        <textarea name="plot" id="plot" required>{{ request.form['plot'] or movie['plot'] }}</textarea>
+
+        <input type="submit" value="Save">
+    </form>
+    <hr>
+    <form action="{{ url_for('movie.delete', movie_id=movie['movie_id']) }}" method="post">
+        <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+    </form>
+{% endblock %}

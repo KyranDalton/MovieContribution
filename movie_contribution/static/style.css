@@ -69,27 +69,27 @@ header .action {
     background: #cae6f6;
 }
 
-.post>header {
+.movie>header {
     display: flex;
     align-items: flex-end;
     font-size: 0.85em;
 }
 
-.post>header>div:first-of-type {
+.movie>header>div:first-of-type {
     flex: auto;
 }
 
-.post>header h1 {
+.movie>header h1 {
     font-size: 1.5em;
     margin-bottom: 0;
 }
 
-.post .about {
+.movie .about {
     color: slategray;
     font-style: italic;
 }
 
-.post .body {
+.movie .body {
     white-space: pre-line;
 }
 

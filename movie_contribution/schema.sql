@@ -1,5 +1,4 @@
 DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS director;
 DROP TABLE IF EXISTS movie;
 
 CREATE TABLE user (
@@ -9,17 +8,11 @@ CREATE TABLE user (
     password TEXT NOT NULL
 );
 
-CREATE TABLE director (
-    director_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT UNIQUE NOT NULL
-);
-
 CREATE TABLE movie (
     movie_id INTEGER PRIMARY KEY AUTOINCREMENT,
     movie_title TEXT NOT NULL,
     plot TEXT NOT NULL,
-    director INTEGER NOT NULL,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     added_by INTEGER NOT NULL,
-    FOREIGN KEY (director) REFERENCES director(director_id),
     FOREIGN KEY (added_by) REFERENCES user(user_id)
 );
