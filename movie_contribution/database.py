@@ -9,6 +9,11 @@ def init_app(app):
     app.cli.add_command(init_db_command)
 
 def get_db():
+    """
+    Returns a database connection, creating
+    one if one does not already exist in the
+    global request object
+    """
     if 'db' not in g:
         g.db = sqlite3.connect(
             current_app.config['DATABASE'],
@@ -19,6 +24,9 @@ def get_db():
     return g.db
 
 def init_db():
+    """
+    Initializes the database with the defined schema
+    """
     db = get_db()
 
     with current_app.open_resource('schema.sql') as schema_file:

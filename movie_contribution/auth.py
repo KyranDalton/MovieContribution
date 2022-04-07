@@ -22,6 +22,11 @@ LOGIN_TEMPLATE = "auth/login.html"
 
 @bp.route("/register", methods=("GET", "POST"))
 def register():
+    """
+    A controller for registration requests,
+    creates a new user storing their details
+    in the database with the password hashed
+    """
     if request.method == "POST":
         username = request.form["username"]
         email = request.form["email"]
@@ -52,6 +57,12 @@ def register():
 
 @bp.route("/login", methods=("GET", "POST"))
 def login():
+    """
+    A controller for login requests which
+    checks the username and password hash,
+    then stores the user information in the
+    client session
+    """
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -82,11 +93,19 @@ def login():
 
 @bp.route("/logout")
 def logout():
+    """
+    Controller to log a user out,
+    clearing their user data from the session.
+    """
     session.clear()
     return redirect(url_for("index"))
 
 @bp.before_app_request
 def load_logged_in_user():
+    """
+    Loads the user object into the global request object
+    for access by other controllers
+    """
     user_id = session.get("user_id")
 
     if user_id is None:
@@ -97,6 +116,10 @@ def load_logged_in_user():
         ).fetchone()
 
 def login_required(view):
+    """
+    Authentication wrapper to ensure all controllers
+    are properly authenticated before continuing
+    """
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:

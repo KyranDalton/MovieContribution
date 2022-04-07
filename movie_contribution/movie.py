@@ -20,7 +20,12 @@ UPDATE_TEMPLATE = "movie/update.html"
 @bp.route("/")
 @login_required
 def index():
+    """
+    The home page controller, fetches all
+    movies and returns them to the view
+    """
     db = get_db()
+    # TODO: Implement pagination to avoid fetching the entire database
     movies = db.execute(
         "SELECT movie_id, movie_title, plot, created, username "
         "FROM movie m JOIN user u ON m.added_by = u.user_id "
@@ -31,6 +36,11 @@ def index():
 @bp.route("/add", methods=("GET", "POST"))
 @login_required
 def add():
+    """
+    Controller to add new movies to the database,
+    performs validation and redirects back to the
+    home page
+    """
     if request.method == "POST":
         movie_title = request.form["movie_title"]
         plot = request.form["plot"]
@@ -56,6 +66,11 @@ def add():
 @bp.route("/<int:movie_id>/update", methods=("GET", "POST"))
 @login_required
 def update(movie_id):
+    """
+    A controller to update movie titles and plots,
+    also performs validation and redirects to the
+    home page.
+    """
     movie = _get_movie(movie_id)
 
     if request.method == "POST":
@@ -82,6 +97,10 @@ def update(movie_id):
 @bp.route("/<int:movie_id>/delete", methods=("POST",))
 @login_required
 def delete(movie_id):
+    """
+    Controller for deleting a movie from the database.
+    Only admin users can perform this action.
+    """
     _get_movie(movie_id)
 
     user_is_admin = g.user['is_admin']
