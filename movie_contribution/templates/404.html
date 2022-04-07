@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}Page Not Found{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <a href="{{ url_for('index') }}">go somewhere nice instead...</a>
+{% endblock %}

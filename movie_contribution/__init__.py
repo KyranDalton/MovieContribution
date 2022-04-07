@@ -20,6 +20,9 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    from movie_contribution.error import page_not_found_error
+    app.register_error_handler(404, page_not_found_error)
+
     from movie_contribution import database
     database.init_app(app)
 
